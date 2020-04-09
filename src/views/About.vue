@@ -18,24 +18,7 @@ export default {
     }
   },
   created(){
-    let aa = 'aa'
 
-    let bb = new Promise((resolve,reject)=>{
-      resolve(1)
-    })
-
-    setTimeout(()=>{
-      console.log(this.msg)
-      console.log(aa)
-      console.log({b: 1,...{c: 3}})
-      console.log([1,2,...[3,4]])
-      console.log([1,2,[3,4]])
-      console.log(Object.assign({b: 5,d: 8},{b: 1,...{c: 3}}))
-      console.log(['aa'].includes(aa))
-      bb.then((result)=>{
-        console.log(result)
-      })
-    },100)
   }
 }
 </script>>
@@ -50,6 +33,7 @@ export default {
   flex-grow: 1;
   display: inline-block;
   height: 200px;
+  background:#666;
 }
 .box-item-2 {
   flex-grow: 0;

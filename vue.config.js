@@ -1,4 +1,5 @@
 const path = require('path')
+var vConsolePlugin = require('vconsole-webpack-plugin')
 
 module.exports = {
   'publicPath': '/', // 公共路径
@@ -27,25 +28,49 @@ module.exports = {
       'warnings': true,
       'errors': true
     }},
-  'configureWebpack': {
-    // 覆盖webpack默认配置的都在这里
-    'resolve': {
-      // 配置解析别名
-      'alias': {
-        '@': path.resolve(__dirname, './src'),
-        '@views': path.resolve(__dirname, './src/views')
+  configureWebpack: config => {
+    let myConfigs = {
+      'resolve': {
+        // 配置解析别名
+        'alias': {
+          '@': path.resolve(__dirname, './src'),
+          '@views': path.resolve(__dirname, './src/views')
+        }
       }
     }
+
+    if (process.env.NODE_ENV === 'production'){
+      // 专门用于生产环境的配置
+    }else{
+      // 专门用于开发环境的配置
+      myConfigs.plugins = [
+        new vConsolePlugin({
+          enable: true
+        })
+      ]
+    }
+    return myConfigs
   },
   css: {
     loaderOptions: {
       postcss: {
         plugins: [
-          require('postcss-pxtorem')({
-            //这里是配置项，详见官方文档
-            rootValue: 37.5, //结果为：设计稿元素尺寸/16，比如元素宽320px,最终页面会换算成 20rem
-            selectorBlackList: ['weui', 'mu'], // 忽略转换正则匹配项
-            propList: ['*']
+          require('postcss-px-to-viewport')({
+            unitToConvert: 'px',
+            viewportWidth: 750,
+            viewportHeight: 1624,
+            unitPrecision: 5,
+            propList: ['*'],
+            viewportUnit: 'vw',
+            fontViewportUnit: 'vw',
+            selectorBlackList: ['.ignore-', '.hairlines'],
+            minPixelValue: 1,
+            mediaQuery: true,
+            replace: true,
+            exclude: [],
+            landscape: false,
+            landscapeUnit: 'vw',
+            landscapeWidth: 1334
           })
         ]
       }
